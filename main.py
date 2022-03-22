@@ -180,6 +180,33 @@ def main(args):
 
     pdf.close()
 
+    pdf = PdfPages('out/boxplot.pdf')
+    medianprops = dict(linewidth=4)
+    for method in methods:
+        data = []
+        for i in range(len(submethods)):
+            submethod = submethods[i]
+            data = results["precision"][method][submethod]
+            plt.subplot(1,len(submethods),i+1)
+            plt.rc('font', size='9')
+            plt.boxplot(data, labels = sortedGroups, medianprops = medianprops, whis=[5,95])
+            plt.title(submethod.capitalize())
+            fig = plt.gcf()
+            ax = plt.gca()
+            plt.xticks(rotation=90)
+            if i==0:
+                plt.ylabel("Average Precision")
+            if i==len(submethods)-1:
+                fig.set_size_inches(6,3)
+            
+        #fig.suptitle(method.capitalize())
+        plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=None)
+        fig.tight_layout()
+        pdf.savefig()
+        plt.close()
+
+    pdf.close()
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Semantic Matcher evaluation tool')
