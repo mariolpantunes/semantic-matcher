@@ -26,7 +26,7 @@ def jaccard_levenshtein(a, b, t:int):
     used_a, used_b = [], []
     rv = 0
     for i,j,s in scores:
-        if s < t and i not in used_a and j not in used_b:
+        if s <= t and i not in used_a and j not in used_b:
             rv += 1
             used_a.append(i)
             used_b.append(j)
@@ -60,7 +60,7 @@ def cosine(a, b, distance, t, reverse=False):
     return np.dot(va, vb)/(np.linalg.norm(va)*np.linalg.norm(vb))
 
 class SemanticMathcer():
-    def __init__(self, jt:float=0.45, lt:int=2, ct:float=0.5):
+    def __init__(self, jt:float=0.3, lt:int=2, ct:float=0.5):
         self.services = {}
         self.jt = jt
         self.lt = lt
@@ -84,7 +84,7 @@ class SemanticMathcer():
         scoreJaccardLevenshtein = []
         for s,d in self.services.items():
             scoreJaccardLevenshtein.append((s, jaccard_levenshtein(query, d, self.lt)))
-        scoreJaccardLevenshtein = [(i,s) for (i,s) in scoreJaccardString if s >= self.jt]
+        scoreJaccardLevenshtein = [(i, s) for (i, s) in scoreJaccardLevenshtein if s >= self.jt]
         scoreJaccardLevenshtein.sort(key=lambda x:x[1], reverse=True)
 
         #Cosine
@@ -92,14 +92,15 @@ class SemanticMathcer():
         scoreCosineString = []
         for s,d in self.services.items():
             scoreCosineString.append((s, cosine(query, d, lambda x,y: Levenshtein.distance(x, y), 0)))
-        scoreCosineString = [(i,s) for (i,s) in scoreJaccardString if s >= self.ct]
+        print(f'scoreCosineString = {scoreCosineString}')
+        scoreCosineString = [(i,s) for (i,s) in scoreCosineString if s >= self.ct]
         scoreCosineString.sort(key=lambda x:x[1], reverse=True)
 
         ## Levenshtein
         scoreCosineLevenshtein = []
         for s,d in self.services.items():
             scoreCosineLevenshtein.append((s, cosine(query, d, lambda x,y: Levenshtein.distance(x, y), self.lt)))
-        scoreCosineLevenshtein = [(i,s) for (i,s) in scoreJaccardString if s >= self.ct]
+        scoreCosineLevenshtein = [(i,s) for (i,s) in scoreCosineLevenshtein if s >= self.ct]
         scoreCosineLevenshtein.sort(key=lambda x:x[1], reverse=True)
 
         return {'jaccard':{'string':scoreJaccardString,'levenshtein':scoreJaccardLevenshtein},
