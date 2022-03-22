@@ -38,6 +38,7 @@ def main(args):
             queries = scenario[t]
             for q in queries:
                 services = semantiMatcher.match(q['query'])
+                print(services)
 
 
 
