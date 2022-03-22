@@ -18,6 +18,26 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
 
 
+def precision (relevant, received):
+    """Computes the precision of a reply.
+    """
+    received_relevants = 0.0
+    for item in received:
+        if item in relevant:
+            received_relevants+=1
+    return received_relevants/len(received)
+
+
+def average_precision(relevant, received):
+    """Computes the average precision of a reply.
+    """
+    result = 0.0
+    for k in range(len(received)):
+        if received[k] in relevant:
+            result+=precision(relevant, received[:k+1])
+    return result/len(relevant)
+
+
 def main(args):
     # create the semantic matcher object
     semantiMatcher = SemanticMathcer()
@@ -26,6 +46,10 @@ def main(args):
     with open(args.i) as json_file:
         scenario = json.load(json_file)
         
+        # compute the average precision
+        methods = ['jaccard', 'cosine']
+        submethods = ['string', 'levenshtein']#, 'semantic']
+
         # load the services and register them
         services = scenario['services']
         for s in services:
@@ -38,8 +62,15 @@ def main(args):
             queries = scenario[t]
             for q in queries:
                 services = semantiMatcher.match(q['query'])
-                print(services)
 
+                queryId = int(q['id'])%100
+                relevant = [queryId]
+
+                for method in methods:
+                    for submethod in services[method]:
+                        received = [i for i,_ in services[method][submethod]]
+                        value = average_precision(relevant, received)
+                        print(f'{method}/{submethod} = {value}')
 
 
 if __name__ == '__main__':
