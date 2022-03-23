@@ -10,6 +10,7 @@ __status__ = 'Development'
 
 import math
 import json
+import config
 import logging
 import argparse
 import numpy as np
@@ -41,7 +42,7 @@ def average_precision(relevant, received):
 
 def main(args):
     # create the semantic matcher object
-    semantiMatcher = SemanticMathcer()
+    semantiMatcher = SemanticMathcer(config.key, config.cache)
 
     # load the scenario.json
     with open(args.i) as json_file:
@@ -50,7 +51,8 @@ def main(args):
     # compute the average precision
     variants=["precision","count"]
     methods = ['jaccard', 'cosine']
-    submethods = ['string', 'levenshtein']  # , 'semantic']
+    submethods =  ['semantic']
+    #['string', 'levenshtein',
 
     # load the services and register them
     services = scenario['services']
