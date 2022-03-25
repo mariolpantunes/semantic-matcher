@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # coding: utf-8
 
 __author__ = 'Mário Antunes'
@@ -79,13 +78,13 @@ def cosine_query(a, b, distance, t=0, reverse=False):
     return cosine(va, vb)
 
 class SemanticMathcer():
-    def __init__(self, key:str, path:str, jt:float=0.3, lt:int=2, ct:float=0.5, st:float=0.1, n:int=5, k:int=1):
+    def __init__(self, key:str, path:str, jt:float=0.0, lt:int=2, ct:float=0.0, st:float=0.2, n:int=5, k:int=1):
         self.services = {}
         self.jt = jt
         self.lt = lt
         self.ct = ct
         self.st = st
-        self.model = dp.DPWModel(corpus=corpus.WebCorpus(key, path), n=n, c=dp.Cutoff.pareto20, k=k)
+        self.model = dp.DPWModel(corpus=corpus.WebCorpus(key, path), n=n, c=dp.Cutoff.pareto20, latent=True, k=k)
 
     def add(self, service):
         key = service['id']
