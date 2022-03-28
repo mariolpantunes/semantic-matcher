@@ -13,14 +13,13 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-from metrics import average_precision
+from matcher.metrics import average_precision
 
 
 def main(args):
-    
     # load the output.json
-    with open(args.i) as json_file:
-        output = json.load(json_file)
+    with open(args.i) as log_file:
+        output = log_file.readlines()
 
     variants = ['precision', 'count']
     methods = ['jaccard', 'cosine']
@@ -36,7 +35,8 @@ def main(args):
     columnCount = len(sortedGroups)
     results = {}
 
-    for row in output['results']:
+    for line in output:
+        row = json.loads(line)
         q = row['query']
         services = row['services']
         queryId = int(q['id']) % 100
@@ -49,7 +49,7 @@ def main(args):
                 for submethod in services[method]:
                     received = [i for i, _ in services[method][submethod]]
                     value = average_precision(relevant, received)
-                    print(f'{group}/{method}/{submethod} = {value}')
+                    #print(f'{group}/{method}/{submethod} = {value}')
                     level0 = results.get(variant,{})
                     column = groupI
                     if variant == 'precision':
@@ -168,7 +168,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Semantic Matcher evaluation tool')
-    parser.add_argument('-i', type=str, help='input file', default="output.json")
+    parser.add_argument('-i', type=str, help='input file', default="output.log")
     args = parser.parse_args()
 
     main(args)

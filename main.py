@@ -15,8 +15,8 @@ import logging
 import argparse
 import numpy as np
 
-from semantic_matcher import SemanticMathcer
-from metrics import mean_average_precision, average_precision
+from matcher.semantic_matcher import SemanticMathcer
+from matcher.metrics import mean_average_precision, average_precision
 
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -49,7 +49,7 @@ def main(args):
     'cosine':{'string':[], 'levenshtein':[], 'semantic':[]}}
 
     output_list = []
-
+    
     for t in tqdm.tqdm(tests):
         queries = scenario[t]
         for q in tqdm.tqdm(queries, leave=False):
@@ -66,6 +66,7 @@ def main(args):
                     received = [i for i, _ in services[method][submethod]]
                     performance[method][submethod].append((relevant, received))
 
+
     # compute the mean average precision
     for method in methods:
         for submethod in submethods:
@@ -78,9 +79,10 @@ def main(args):
             print(f'{method}/{submethod} = {value}')
     
     # store the output in a file
-    with open('output.json', 'w') as outfile:
-        json_object = json.dumps({'results':output_list})
-        outfile.write(json_object)
+    with open('output.log', 'w') as outfile:
+        for output in output_list:
+            json_object = json.dumps(output)
+            outfile.write(json_object + '\n')
 
 
 if __name__ == '__main__':

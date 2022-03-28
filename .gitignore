@@ -3,6 +3,7 @@ config.py
 .vscode
 out/
 dataset/
+dataset_old/
 
 
 # Byte-compiled / optimized / DLL files

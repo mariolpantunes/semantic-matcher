@@ -5,6 +5,10 @@ __version__ = '0.1'
 __email__ = 'mariolpantunes@gmail.com'
 __status__ = 'Development'
 
+
+import numpy as np
+
+
 def precision(relevant, received):
     received_relevants = 0.0
     for item in received:
@@ -26,3 +30,13 @@ def mean_average_precision(relevant, received):
     for i in range(len(relevant)):
         rv += average_precision(relevant[i], received[i])
     return rv/len(relevant)
+
+
+def jaccard(a, b):
+    intersection = len(list(set(a).intersection(b)))
+    union = (len(a) + len(b)) - intersection
+    return float(intersection) / union
+
+
+def cosine(va, vb):
+    return np.dot(va, vb)/(np.linalg.norm(va)*np.linalg.norm(vb))
