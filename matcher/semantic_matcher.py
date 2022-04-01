@@ -71,13 +71,19 @@ def cosine_query(a, b, scores, reverse=False):
 
 
 class SemanticMathcer():
-    def __init__(self, key:str, path:str, jt:float=0.5, lt:int=2, ct:float=0.5, st:float=0.1, n:int=3, k:int=3):
+    def __init__(self, key:str, path:str, limit:int=0, model:str='dpw', jt:float=.45, 
+    lt:int=2, ct:float=.5, st:float=0.05, n:int=5, latent:bool=False, k:int=2, kl:int=0):
         self.services = {}
         self.jt = jt
         self.lt = lt
         self.ct = ct
         self.st = st
-        self.model = dp.DPWCModel(corpus=corpus.WebCorpus(key, path), n=n, kl=8, c=dp.Cutoff.pareto20, latent=True, k=k)
+        
+        if model == 'dpw':
+            self.model = dp.DPWModel(corpus=corpus.WebCorpus(key, path, limit=limit), n=n, c=dp.Cutoff.pareto20, latent=latent, k=k)
+        else:
+            self.model = dp.DPWCModel(corpus=corpus.WebCorpus(key, path, limit=limit), n=n, kl=kl, c=dp.Cutoff.pareto20, latent=latent, k=k)
+
 
     def add(self, service):
         key = service['id']

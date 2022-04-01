@@ -1,0 +1,11 @@
+cache='dataset'
+limit=0
+model='dpw'
+jt=0.45
+lt=2
+ct=0.5
+st=0.008
+n=5
+latent=False
+k=2
+kl=15

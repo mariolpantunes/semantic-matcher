@@ -13,7 +13,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-from matcher.metrics import average_precision
+from matcher.metrics import average_precision, mean_average_precision
 
 
 def main(args):
@@ -34,6 +34,8 @@ def main(args):
     
     columnCount = len(sortedGroups)
     results = {}
+    performance = {'jaccard':{'string':{}, 'levenshtein':{}, 'semantic':{}}, 
+    'cosine':{'string':{}, 'levenshtein':{}, 'semantic':{}}}
 
     for line in output:
         row = json.loads(line)
@@ -50,6 +52,10 @@ def main(args):
                     received = [i for i, _ in services[method][submethod]]
                     value = average_precision(relevant, received)
                     #print(f'{group}/{method}/{submethod} = {value}')
+                    if group not in performance[method][submethod]:
+                        performance[method][submethod][group] = []
+                    performance[method][submethod][group].append((relevant, received))
+
                     level0 = results.get(variant,{})
                     column = groupI
                     if variant == 'precision':
@@ -165,6 +171,18 @@ def main(args):
 
     pdf.close()
 
+
+    # compute the mean average precision
+    for method in methods:
+        for submethod in submethods:
+            for group_key in groups:
+                temp_list = performance[method][submethod][groups[group_key]]
+                relevant, received = [], []
+                for rel, rec in temp_list:
+                    relevant.append(rel)
+                    received.append(rec)
+                value = mean_average_precision(relevant, received)
+                print(f'{method}/{submethod}/{groups[group_key]} = {value}')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Semantic Matcher evaluation tool')

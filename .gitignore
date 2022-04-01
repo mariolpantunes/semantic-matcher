@@ -1,10 +1,11 @@
 output.json
-config.py
+secret.py
+optimize.py
 .vscode
 out/
 dataset/
 dataset_old/
-
+*.pickle
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
