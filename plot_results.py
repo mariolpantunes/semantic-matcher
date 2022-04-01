@@ -183,6 +183,19 @@ def main(args):
                     received.append(rec)
                 value = mean_average_precision(relevant, received)
                 print(f'{method}/{submethod}/{groups[group_key]} = {value}')
+    
+    # global mPA
+    for method in methods:
+        for submethod in submethods:
+            relevant, received = [], []
+            for group_key in groups:
+                temp_list = performance[method][submethod][groups[group_key]]
+                for rel, rec in temp_list:
+                    relevant.append(rel)
+                    received.append(rec)
+            value = mean_average_precision(relevant, received)
+            print(f'{method}/{submethod} = {value}')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Semantic Matcher evaluation tool')
