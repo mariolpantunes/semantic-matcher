@@ -2,4 +2,4 @@ tqdm>=4.63.0
 numpy>=1.22.3
 matplotlib>=3.5.1
 Levenshtein>=0.18.1
-git+https://github.com/mariolpantunes/semantic@v1.1#egg=semantic
+git+https://github.com/mariolpantunes/semantic@v1.2#egg=semantic
