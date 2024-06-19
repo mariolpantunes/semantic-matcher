@@ -48,6 +48,7 @@ def jaccard_query(a, b, scores, reverse=False):
 
 
 def cosine_query(a, b, scores, reverse=False):
+    print(f'{a} {b} {scores}')
     scores.sort(key=lambda x:x[2], reverse=reverse)
     used_a, used_b = [], []
     va, vb = [], []
@@ -91,6 +92,17 @@ class SemanticMathcer():
             self.services[key] = service['description']
             self.model.fit(service['description'])
     
+
+    def buildIdx(self):
+        print('Build Index')
+        ## add reverse index for cosine similarity
+        list_of_keywords = []
+        for _,d in self.services.items():
+            list_of_keywords.extend(d)
+        print(f'{list_of_keywords}')
+        list_of_keywords = sorted(list(set(list_of_keywords)))
+        print(f'{list_of_keywords}')
+
     def match(self, query):
         scoreJaccardString = []
         scoreJaccardLevenshtein = []
@@ -112,6 +124,7 @@ class SemanticMathcer():
             
             scoreCosineString.append((s, cosine_query(query, d, scores_string)))
             scoreCosineLevenshtein.append((s, cosine_query(query, d, scores_levenshtein)))
+            print(f'Semantic cosine query...')
             scoreCosineSemantic.append((s, cosine_query(query, d, scores_semantic, reverse=True)))
         
         # Jaccard
