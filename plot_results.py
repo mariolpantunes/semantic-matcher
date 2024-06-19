@@ -153,7 +153,7 @@ def main(args):
             data = results["precision"][method][submethod]
             plt.subplot(1,len(submethods),i+1)
             plt.rc('font', size='9')
-            plt.boxplot(data, labels = sortedGroups, medianprops = medianprops, whis=[5,95])
+            plt.boxplot(data, tick_labels = sortedGroups, medianprops = medianprops, whis=[5,95])
             plt.title(submethod.capitalize())
             fig = plt.gcf()
             ax = plt.gca()
