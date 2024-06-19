@@ -21,7 +21,7 @@ from matcher.semantic_matcher import SemanticMathcer
 from matcher.metrics import mean_average_precision, average_precision
 
 
-logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
 
 
@@ -50,7 +50,7 @@ def main(args):
         semantiMatcher.add(s)
     semantiMatcher.buildIdx()
 
-    '''# run the tests
+    # run the tests
     tests = ['queries m2m', 'queries one-error', 'queries two-errors-one-word',
     'queries two-errors-two-words', 'queries one-synonym', 'queries two-synonyms',
     'queries three-synonyms', 'queries four-synonyms']
@@ -97,7 +97,7 @@ def main(args):
     if args.s is not None:
         logger.info(f'Store semantic model: {args.s}')
         with open(args.s, 'wb') as output_file:
-            pickle.dump(semantiMatcher.model, output_file)'''
+            pickle.dump(semantiMatcher.model, output_file)
 
 
 if __name__ == '__main__':

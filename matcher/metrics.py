@@ -6,6 +6,7 @@ __email__ = 'mariolpantunes@gmail.com'
 __status__ = 'Development'
 
 
+import math
 import numpy as np
 
 
@@ -39,4 +40,4 @@ def jaccard(a, b):
 
 
 def cosine(va, vb):
-    return np.dot(va, vb)/(np.linalg.norm(va)*np.linalg.norm(vb))
+    return np.dot(va, vb)/max((np.linalg.norm(va)*np.linalg.norm(vb)), math.ulp(1.0))
