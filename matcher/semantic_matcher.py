@@ -11,6 +11,7 @@ import semantic.dp as dp
 import semantic.corpus as corpus
 
 
+from heapq import nlargest
 from matcher.metrics import cosine, jaccard
 from joblib import Parallel, delayed
 from rapidfuzz.distance import Levenshtein
@@ -28,24 +29,21 @@ def compute_jaccard_scores(a, b, distance, t=0, reverse=False):
     return scores
 
 
-def compute_cosine_similarity(keywords, query, service_vector, similarity):
+def compute_cosine_similarity(keywords, query, service_vector, similarity, n_jobs=-1):
     query_vector = [0.0] * len(service_vector)
-    for q in query:
-        current_query_vector = []
-        for k in keywords:
-            current_query_vector.append(similarity(q, k))
-        done = False
-        while not done:
-            max_value = max(current_query_vector)
-            if max_value > 0:
-                max_idx = current_query_vector.index(max(current_query_vector))
-                if query_vector[max_idx] == 0.0:
-                    query_vector[max_idx] = current_query_vector[max_idx]
-                    done = True
-                else:
-                    current_query_vector[max_idx] = 0.0
-            else:
-                done = True
+    # compute scores in parallel
+    #scores = Parallel(n_jobs=n_jobs, backend='loky')(delayed(similarity)(q, k) for q in query for k in keywords)
+    scores = [similarity(q, k) for q in query for k in keywords]
+    # reorganize scores
+    for i in range(len(query)):
+        for j in range(len(keywords)):
+            scores_idx = i * len(keywords) + j
+            s = scores[scores_idx]
+            if s > query_vector[j]:
+                query_vector[j] = s
+    # truncate query_vector to only k non-zero values
+    threshold = min(nlargest(len(query), query_vector))
+    query_vector = [score if score >= threshold else 0.0 for score in query_vector]
     metric = cosine(service_vector, query_vector)
     return metric
 
