@@ -75,7 +75,7 @@ class SemanticMathcer():
         self.services = {}
         self.jt = jt
         self.lt = lt
-        self.ct = ct
+        self.ct = ct # Not used, may be removed
         self.st = st
         self.reverse = True
         self.model_name = model
