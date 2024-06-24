@@ -1,0 +1,16 @@
+cache='dataset'                   # cache for the corpus
+limit=0                           # Max number of snippets (0 is unlimited)
+model='fasttext'                  # Model name
+jt=0.45                           # Jaccard Thresold [0.2 .. 0.8]
+lt=2                              # Minimum word letter [2]            
+ct=0.5                            # Cosine Threshold [not used anymore]
+st=0.008                          # Semantic Threshold [0.001, 0.003, 0.005, 0.007, 0.01, 0.03, 0.05, 0.07, 0.1, 0.3, 0.5, 0.7]
+n=5                               # Window for neighbourhood [1,3,5,7] -> Não sei se o corpus tem informação para treinar o n 7
+latent=False                      # DPW/DPWC apply latent learning [True, False]
+k=2                               # Reduction factor for latent learning [2,4,8]
+kl=15                             # Clustering limit in DPWC [5,10,15,20,25,30]
+window_size=3                     # Same as N
+vector_size=300                   # Vector size for embedded models
+pretrained="pretrained_optimized" # Not sure
+semantic_trainning=True           # Not sure
+n_threads=32                      # Not sure
