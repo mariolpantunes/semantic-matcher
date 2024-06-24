@@ -26,7 +26,7 @@ class Glove_model():
             command = f"./glove/shuffle -verbose 2 < {self.output/'cooccurrence.bin'} > {self.output/'cooccurrence_shuffle.bin'}"
             subprocess.run(command, shell=True)
 
-            command = f"./glove/glove -save-file {self.output/'vectors'} -threads {n_threads} -input-file {self.output/'cooccurrence_shuffle.bin'} -x-max 10 -iter 100 -vector-size {vector_size} -binary 2 -vocab-file {self.output/'vocab.txt'} -verbose 2"
+            command = f"./glove/glove -save-file {self.output/'vectors'} -threads {n_threads} -input-file {self.output/'cooccurrence_shuffle.bin'} -x-max 10 -iter 20 -vector-size {vector_size} -binary 2 -vocab-file {self.output/'vocab.txt'} -verbose 2"
             subprocess.run(command, shell=True)
 
             model_file = self.output / 'vectors.txt'

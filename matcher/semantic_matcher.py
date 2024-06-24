@@ -69,12 +69,11 @@ def cosine_query(keywords, query, service_vector, similarity, n_jobs=-1):
 
 class SemanticMathcer():
     def __init__(self, path:str, key:str="", limit:int=0, model:str='dpw', jt:float=.45, 
-                lt:int=2, ct:float=.5, st:float=0.05, n:int=5, latent:bool=False, k:int=2, kl:int=0,
-                vector_size=50, window_size=3, pretrained="from_scratch", semantic_trainning=False, output="results", n_threads=32):
+                ct:float=.5, st:float=0.05, n:int=5, latent:bool=False, k:int=2, kl:int=0,
+                vector_size=50, window_size=3, pretrained="from_scratch", semantic_training=False, output="results", n_threads=32):
         self.idx = {}
         self.services = {}
         self.jt = jt
-        self.lt = lt
         self.ct = ct
         self.st = st
         self.reverse = True
@@ -90,12 +89,10 @@ class SemanticMathcer():
         elif model == "word2vec":
             self.model = Word2Vec_model(corpus_path=path, vector_size=vector_size, window_size=window_size, output=output, pretrained=pretrained, n_threads=n_threads)
         elif model == "sbert":
-            self.model = Sbert_model(corpus_path=path, vector_size=vector_size, 
-                                    window_size=window_size, output=output,
-                                      pretrained=pretrained, semantic_trainning=semantic_trainning)
+            self.model = Sbert_model(corpus_path=path, vector_size=vector_size, output=output,
+                                      pretrained=pretrained, semantic_training=semantic_training)
         elif model == "string":
             self.model = Levenshtein_model()
-            self.lt = 0
             self.reverse = False
         elif model == "levenshtein":
             self.model = Levenshtein_model()

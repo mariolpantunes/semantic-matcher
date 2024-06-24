@@ -4,7 +4,7 @@ from rapidfuzz.distance import Levenshtein
 
 class Levenshtein_model():
 
-    def __init__(self, output) -> None:
+    def __init__(self) -> None:
         pass
 
     def fit(self, description):

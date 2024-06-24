@@ -40,14 +40,14 @@ class TokenizedSentencesDataset:
 
 class Sbert_model():
 
-    def __init__(self, corpus_path, vector_size, window_size, output, pretrained="from_scratch", semantic_trainning=True) -> None:
+    def __init__(self, corpus_path, vector_size, output, pretrained="from_scratch", semantic_training=True) -> None:
         self.output = output
         self.output.mkdir(parents=True, exist_ok=True)
 
         if pretrained == "pretrained":
             self.model = SentenceTransformer("roberta-base")
 
-            if semantic_trainning:
+            if semantic_training:
                 self.train_model(str(self.output / "base_model"), str(self.output / "trained_model"))
 
         elif pretrained == "pretrained_optimized":
@@ -61,7 +61,7 @@ class Sbert_model():
 
             per_device_train_batch_size = 64
             save_steps = 1000               #Save model every 1k steps
-            num_train_epochs = 5            #Number of epochs
+            num_train_epochs = 3           #Number of epochs
             use_fp16 = True                #Set to True, if your GPU supports FP16 operations
             max_length = 100                #Max length for a text input
             mlm_prob = 0.15                 #Probability that a word is replaced by a [MASK] token
@@ -119,7 +119,7 @@ class Sbert_model():
             model.save_pretrained(str(self.output / "base_model"))
 
             self.model = SentenceTransformer(str(self.output / "base_model"))
-            if semantic_trainning:
+            if semantic_training:
                 self.train_model(str(self.output / "base_model"), str(self.output / "trained_model"))
         else:
             dataset = pathlib.Path(corpus_path)
@@ -131,7 +131,7 @@ class Sbert_model():
             per_device_train_batch_size = 64
 
             save_steps = 1000               #Save model every 1k steps
-            num_train_epochs = 5            #Number of epochs
+            num_train_epochs = 3            #Number of epochs
             use_fp16 = True                #Set to True, if your GPU supports FP16 operations
             max_length = 100                #Max length for a text input
             mlm_prob = 0.15                 #Probability that a word is replaced by a [MASK] token
@@ -209,7 +209,7 @@ class Sbert_model():
 
             self.model = SentenceTransformer(str(self.output / "base_model"))
 
-            if semantic_trainning:
+            if semantic_training:
                 self.train_model(str(self.output / "base_model"), str(self.output / "trained_model"))
 
     def train_model(self, base_model_path, trained_model_path):
@@ -233,7 +233,7 @@ class Sbert_model():
             # Required parameter:
             output_dir= trained_model_path + "/checkpoints",
             # Optional training parameters:
-            num_train_epochs=1,
+            num_train_epochs=3,
             per_device_train_batch_size=64,
             per_device_eval_batch_size=64,
             learning_rate=2e-5,
