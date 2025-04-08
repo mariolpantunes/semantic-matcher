@@ -15,9 +15,11 @@ import logging
 import argparse
 import time
 
+
 from matcher.semantic_matcher import SemanticMathcer
 from matcher.metrics import mean_average_precision, average_precision
 import pathlib
+
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
@@ -117,8 +119,7 @@ def main(args):
         'queries two-errors-two-words', 'queries one-synonym', 'queries two-synonyms',
         'queries three-synonyms', 'queries four-synonyms']
 
-        performance = {'jaccard':[], 
-        'cosine':[]}
+        performance = {'jaccard':[], 'cosine':[]}
 
         output_list = []
         start_time = time.time()
@@ -158,7 +159,6 @@ def main(args):
                 value = mean_average_precision(relevant, received)
                 print(f'{method} = {value}')
                 outfile.write(f'{method} = {value}\n')
-
 
         # store the semantic model
         if args.s is not None and "dpw" in args.model:

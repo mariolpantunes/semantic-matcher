@@ -5,15 +5,17 @@ __version__ = '0.1'
 __email__ = 'mariolpantunes@gmail.com'
 __status__ = 'Development'
 
+
 from heapq import nlargest
-import semantic.dp as dp
-import semantic.corpus as corpus
 from matcher.fasttext_matcher import FastText_model
 from matcher.glove_matcher import Glove_model
 from matcher.word2vec_matcher import Word2Vec_model
 from matcher.sbert_matcher import Sbert_model
 from matcher.levenshtein_matcher import Levenshtein_model
 from matcher.metrics import cosine
+
+import semantic.dp as dp
+import semantic.corpus as corpus
 
 
 def pre_compute_scores(a, b, distance, t=0, reverse=False):
@@ -68,7 +70,7 @@ def cosine_query(keywords, query, service_vector, similarity, n_jobs=-1):
 
 
 class SemanticMathcer():
-    def __init__(self, path:str, key:str="", limit:int=0, model:str='dpw', jt:float=.45, 
+    def __init__(self, path:str, limit:int=0, model:str='dpw', jt:float=.45, 
                 ct:float=.5, st:float=0.05, n:int=5, latent:bool=False, k:int=2, kl:int=0,
                 vector_size=50, window_size=3, pretrained="from_scratch", semantic_training=False, output="results", n_threads=32):
         self.idx = {}
@@ -79,9 +81,9 @@ class SemanticMathcer():
         self.reverse = True
         self.model_name = model
         if model == 'dpw':
-            self.model = dp.DPWModel(corpus=corpus.WebCorpus(key, path, limit=limit), n=n, c=dp.Cutoff.pareto20, latent=latent, k=k)
+            self.model = dp.DPWModel(corpus=corpus.WebCorpus(path, limit=limit), n=n, c=dp.Cutoff.pareto20, latent=latent, k=k)
         elif model == "dpwc":
-            self.model = dp.DPWCModel(corpus=corpus.WebCorpus(key, path, limit=limit), n=n, kl=kl, c=dp.Cutoff.pareto20, latent=latent, k=k)
+            self.model = dp.DPWCModel(corpus=corpus.WebCorpus(path, limit=limit), n=n, kl=kl, c=dp.Cutoff.pareto20, latent=latent, k=k)
         elif model == "fasttext":
             self.model = FastText_model(corpus_path=path, vector_size=vector_size, window_size=window_size, output=output, pretrained=pretrained, n_threads=n_threads)
         elif model == "glove":
