@@ -71,8 +71,9 @@ def cosine_query(keywords, query, service_vector, similarity, n_jobs=-1):
 
 class SemanticMathcer():
     def __init__(self, path:str, limit:int=0, model:str='dpw', jt:float=.45, 
-                ct:float=.5, st:float=0.05, n:int=5, latent:bool=False, k:int=2, kl:int=0,
-                vector_size=50, window_size=3, pretrained="from_scratch", semantic_training=False, output="results", n_threads=32):
+                ct:float=.5, st:float=0.05, n:int=5, latent:bool=False, k:int=2, 
+                kl:int=0, vector_size=50, window_size=3, pretrained="from_scratch", 
+                semantic_training=False, output="results", n_threads=32):
         self.idx = {}
         self.services = {}
         self.jt = jt

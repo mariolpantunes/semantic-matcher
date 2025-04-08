@@ -1,7 +1,6 @@
-
 from rapidfuzz.distance import Levenshtein
 
-
+#TODO: use edit distance offers more control
 class Levenshtein_model():
 
     def __init__(self) -> None:

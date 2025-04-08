@@ -3,8 +3,8 @@ secret.py
 optimize.py
 .vscode
 out/
-dataset/
-dataset_old/
+corpus*
+dataset*
 *.pickle
 tmp/
 results/*

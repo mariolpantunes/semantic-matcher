@@ -107,10 +107,10 @@ def main(args):
 
         # load the services and register them
         services = scenario['services']
-        start_time = time.time()
+        start_time = time.process_time()
         for s in tqdm.tqdm(services):
             semantiMatcher.add(s)
-        train_time = time.time()-start_time
+        train_time = time.process_time()-start_time
         
         semantiMatcher.buildIdx()
 
@@ -122,7 +122,7 @@ def main(args):
         performance = {'jaccard':[], 'cosine':[]}
 
         output_list = []
-        start_time = time.time()
+        start_time = time.process_time()
         for t in tqdm.tqdm(tests):
             queries = scenario[t]
             for q in tqdm.tqdm(queries, leave=False):
@@ -137,7 +137,7 @@ def main(args):
                 for method in methods:
                     received = [i for i, _ in services[method]]
                     performance[method].append((relevant, received))
-        prediction_time = time.time()-start_time
+        prediction_time = time.process_time()-start_time
 
         # store the output in a file
         with open(output/ 'output.log', 'w') as outfile:

@@ -8,6 +8,6 @@ transformers[torch]
 torch==1.9.0
 sentence-transformers
 pandas
-git+https://github.com/mariolpantunes/semantic@V1.5#egg=semantic
+git+https://github.com/mariolpantunes/semantic@main#egg=semantic
 datasets
 scipy==1.10.1
