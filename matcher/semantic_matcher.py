@@ -125,7 +125,9 @@ class SemanticMathcer():
                     vector.append(0.0)
             self.idx[s] = vector
         
-        self.model.calculate_bias(self.keywords)
+        # DPW and DPWC do this internaly
+        if hasattr(self.model, 'calculate_bias') and callable(self.model.calculate_bias):
+            self.model.calculate_bias(self.keywords)
     
     def match(self, query):
         scoreJaccardSemantic = []
