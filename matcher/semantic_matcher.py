@@ -125,7 +125,7 @@ class SemanticMathcer():
                     vector.append(0.0)
             self.idx[s] = vector
         
-        # DPW and DPWC do this internaly
+        # DPW and DPWC do this internally
         if hasattr(self.model, 'calculate_bias') and callable(self.model.calculate_bias):
             self.model.calculate_bias(self.keywords)
     
