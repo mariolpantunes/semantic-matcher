@@ -70,21 +70,20 @@ def cosine_query(keywords, query, service_vector, similarity, n_jobs=-1):
 
 
 class SemanticMathcer():
-    def __init__(self, path:str, limit:int=0, model:str='dpw', jt:float=.45, 
-                ct:float=.5, st:float=0.05, n:int=5, latent:bool=False, k:int=2, 
-                kl:int=0, vector_size=50, window_size=3, pretrained="from_scratch", 
-                semantic_training=False, output="results", n_threads=32):
+    def __init__(self, path:str, limit:int=0, model:str='dpw', jt:float=0.00,st:float=0.15, 
+    n:int=5, c:dp.Cutoff=dp.Cutoff.pareto20, latent:bool=False, k:int=2, kl:int=0, 
+    vector_size=50, window_size=3, pretrained="from_scratch", semantic_training=False, 
+    output="results", n_threads=32):
         self.idx = {}
         self.services = {}
         self.jt = jt
-        self.ct = ct
         self.st = st
         self.reverse = True
         self.model_name = model
         if model == 'dpw':
-            self.model = dp.DPWModel(corpus=corpus.WebCorpus(path, limit=limit), n=n, c=dp.Cutoff.pareto20, latent=latent, k=k)
+            self.model = dp.DPWModel(corpus=corpus.WebCorpus(path, limit=limit), n=n, c=c, latent=latent, k=k)
         elif model == "dpwc":
-            self.model = dp.DPWCModel(corpus=corpus.WebCorpus(path, limit=limit), n=n, kl=kl, c=dp.Cutoff.pareto20, latent=latent, k=k)
+            self.model = dp.DPWCModel(corpus=corpus.WebCorpus(path, limit=limit), n=n, kl=kl, c=c, latent=latent, k=k)
         elif model == "fasttext":
             self.model = FastText_model(corpus_path=path, vector_size=vector_size, window_size=window_size, output=output, pretrained=pretrained, n_threads=n_threads)
         elif model == "glove":

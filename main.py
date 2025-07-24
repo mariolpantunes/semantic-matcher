@@ -17,7 +17,7 @@ import time
 
 
 from matcher.semantic_matcher import SemanticMathcer
-from matcher.metrics import mean_average_precision, average_precision
+from matcher.metrics import mean_average_precision
 import pathlib
 
 
