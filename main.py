@@ -35,9 +35,9 @@ def main(args):
             else:
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{semantic}_{config['vector_size']}"
             # create the semantic matcher object
-            start_time = time.time()
+            start_time = time.process_time()
             semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
-            init_time = time.time() - start_time
+            init_time = time.process_time() - start_time
 
         elif config["model"] == "glove":
             if config['pretrained'] == 'pretrained':
@@ -45,9 +45,9 @@ def main(args):
             else:
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{config['vector_size']}_{config['window_size']}"
             # create the semantic matcher object
-            start_time = time.time()
+            start_time = time.process_time()
             semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
-            init_time = time.time() - start_time
+            init_time = time.process_time() - start_time
 
         elif config["model"] == "word2vec":
             if config['pretrained'] == 'pretrained':
@@ -55,41 +55,41 @@ def main(args):
             else:
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{config['vector_size']}_{config['window_size']}"
             # create the semantic matcher object
-            start_time = time.time()
+            start_time = time.process_time()
             semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
-            init_time = time.time() - start_time
+            init_time = time.process_time() - start_time
 
         elif "dpw" in config["model"]:
             output = pathlib.Path(args.o) / config["model"]
             output.mkdir(parents=True, exist_ok=True)
             # create the semantic matcher object
-            start_time = time.time()
+            start_time = time.process_time()
             semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
-            init_time = time.time() - start_time
+            init_time = time.process_time() - start_time
 
         elif config["model"] == "levenshtein" or config["model"] == "string":
             output = pathlib.Path(args.o) / config["model"]
             output.mkdir(parents=True, exist_ok=True)
             # create the semantic matcher object
-            start_time = time.time()
+            start_time = time.process_time()
             semantiMatcher = SemanticMathcer(path=configs.cache, **config) 
-            init_time = time.time() - start_time
+            init_time = time.process_time() - start_time
         elif config["model"] == "fasttext":
             if config['pretrained'] != "from_scratch":
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}"
             else:
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{config['vector_size']}_{config['window_size']}"
                 # create the semantic matcher object
-            start_time = time.time()
+            start_time = time.process_time()
             semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
-            init_time = time.time() - start_time
+            init_time = time.process_time() - start_time
 
         else:
             output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{config['vector_size']}_{config['window_size']}"
             # create the semantic matcher object
-            start_time = time.time()
+            start_time = time.process_time()
             semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
-            init_time = time.time() - start_time
+            init_time = time.process_time() - start_time
 
         if "dpw" in config["model"]: 
             # load data model

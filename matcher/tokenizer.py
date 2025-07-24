@@ -2,8 +2,6 @@ import nltk
 import re
 import string
 
-nltk.download('stopwords')
-nltk.download('punkt')
 '''
 function for data cleaning and processing
 '''

@@ -2,13 +2,17 @@ import time
 import json
 import tqdm
 import matcher.semantic_matcher as sm
+import pathlib
 
 for n in [7,5,3]:
     with open('scenario.json') as json_file:
         scenario = json.load(json_file)
         #print(f'{scenario}')
+        #create corpus dir
+        corpus_folder = pathlib.Path("corpus")
+        corpus_folder.mkdir(parents=True, exist_ok=True)
 
-        semantiMatcher = sm.SemanticMathcer(path='corpus', n=n, latent=True)
+        semantiMatcher = sm.SemanticMathcer(path=corpus_folder, n=n, latent=True)
 
         # Train for the service description
         services = scenario['services']
