@@ -1,6 +1,4 @@
-output.json
-secret.py
-optimize.py
+output*
 .vscode
 out/
 corpus*
