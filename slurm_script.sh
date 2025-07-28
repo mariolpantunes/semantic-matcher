@@ -14,9 +14,3 @@ source venv/bin/activate
 
 # Run the script/values corresponding to the array index
 srun python3 train.py
-
-#$SLURM_ARRAY_TASK_ID defines which array position is running
-
-#If there is only one script/value combination to run, remove the (#SBATCH --array=0-5)
-#And run something like
-#srun python3 code/run.py --hyper hyperparameters/Tabular/Abalone/

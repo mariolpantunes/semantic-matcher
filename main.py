@@ -9,7 +9,6 @@ __status__ = 'Development'
 import tqdm
 import json
 import pickle
-import secret
 import configs
 import logging
 import argparse
@@ -17,7 +16,7 @@ import time
 
 
 from matcher.semantic_matcher import SemanticMathcer
-from matcher.metrics import mean_average_precision, average_precision
+from matcher.metrics import mean_average_precision
 import pathlib
 
 
@@ -28,6 +27,7 @@ logger = logging.getLogger(__name__)
 def main(args):
 
     for config in configs.configs:
+        print(config)
         if config["model"] == "sbert":
             semantic = "semtrain" if config["semantic_training"] else "base"
             if config['pretrained'] == 'pretrained' or config['pretrained'] == 'pretrained_optimized':
@@ -36,7 +36,7 @@ def main(args):
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{semantic}_{config['vector_size']}"
             # create the semantic matcher object
             start_time = time.process_time()
-            semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
+            semanticMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
             init_time = time.process_time() - start_time
 
         elif config["model"] == "glove":
@@ -46,7 +46,7 @@ def main(args):
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{config['vector_size']}_{config['window_size']}"
             # create the semantic matcher object
             start_time = time.process_time()
-            semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
+            semanticMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
             init_time = time.process_time() - start_time
 
         elif config["model"] == "word2vec":
@@ -56,7 +56,7 @@ def main(args):
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{config['vector_size']}_{config['window_size']}"
             # create the semantic matcher object
             start_time = time.process_time()
-            semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
+            semanticMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
             init_time = time.process_time() - start_time
 
         elif "dpw" in config["model"]:
@@ -64,7 +64,7 @@ def main(args):
             output.mkdir(parents=True, exist_ok=True)
             # create the semantic matcher object
             start_time = time.process_time()
-            semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
+            semanticMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
             init_time = time.process_time() - start_time
 
         elif config["model"] == "levenshtein" or config["model"] == "string":
@@ -72,7 +72,7 @@ def main(args):
             output.mkdir(parents=True, exist_ok=True)
             # create the semantic matcher object
             start_time = time.process_time()
-            semantiMatcher = SemanticMathcer(path=configs.cache, **config) 
+            semanticMatcher = SemanticMathcer(path=configs.cache, **config) 
             init_time = time.process_time() - start_time
         elif config["model"] == "fasttext":
             if config['pretrained'] != "from_scratch":
@@ -81,14 +81,14 @@ def main(args):
                 output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{config['vector_size']}_{config['window_size']}"
                 # create the semantic matcher object
             start_time = time.process_time()
-            semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
+            semanticMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
             init_time = time.process_time() - start_time
 
         else:
             output = pathlib.Path(args.o) / config["model"] / f"{config['pretrained']}_{config['vector_size']}_{config['window_size']}"
             # create the semantic matcher object
             start_time = time.process_time()
-            semantiMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
+            semanticMatcher = SemanticMathcer(path=configs.cache, output=output, **config) 
             init_time = time.process_time() - start_time
 
         if "dpw" in config["model"]: 
@@ -97,7 +97,7 @@ def main(args):
                 logger.info(f'Load semantic model: {args.l}')
                 with open(args.l, 'rb') as input_file:
                     model = pickle.load(input_file)
-                    semantiMatcher.model = model
+                    semanticMatcher.model = model
 
         # load the scenario.json
         with open(args.i) as json_file:
@@ -109,10 +109,10 @@ def main(args):
         services = scenario['services']
         start_time = time.process_time()
         for s in tqdm.tqdm(services):
-            semantiMatcher.add(s)
+            semanticMatcher.add(s)
         train_time = time.process_time()-start_time
         
-        semantiMatcher.buildIdx()
+        semanticMatcher.buildIdx()
 
         # run the tests
         tests = ['queries m2m', 'queries one-error', 'queries two-errors-one-word',
@@ -126,7 +126,7 @@ def main(args):
         for t in tqdm.tqdm(tests):
             queries = scenario[t]
             for q in tqdm.tqdm(queries, leave=False):
-                services = semantiMatcher.match(q['query'])
+                services = semanticMatcher.match(q['query'])
 
                 # store results for output
                 output_list.append({'query':q, 'services':services})
@@ -164,7 +164,7 @@ def main(args):
         if args.s is not None and "dpw" in args.model:
             logger.info(f'Store semantic model: {args.s}')
             with open(args.s, 'wb') as output_file:
-                pickle.dump(semantiMatcher.model, output_file)
+                pickle.dump(semanticMatcher.model, output_file)
 
 
 if __name__ == '__main__':
