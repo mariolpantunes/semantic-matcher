@@ -4,6 +4,7 @@ import pathlib
 import glob
 import time
 import json
+import gzip
 
 import numpy as np
 from matcher.tokenizer import tokenizer
@@ -39,11 +40,11 @@ class Word2Vec_model():
         self.bias = None
 
     def dataset_preprocessing(self, dataset, preprocessed_dataset):
-        train_files = glob.glob(str(dataset)+'/*.csv')
+        train_files = glob.glob(str(dataset)+'/*.csv.gz')
         setences_tokens = []
 
         for f in train_files:
-            with open(f, 'rt', newline='', encoding='utf-8') as f:
+            with gzip.open(f, mode='rt', newline='', encoding='utf-8') as f:
                 snippets = f.readlines()
                 for s in snippets:
                     setences_tokens.append(tokenizer(s))

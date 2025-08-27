@@ -3,6 +3,7 @@ import glob
 import pathlib
 from matcher.tokenizer import tokenizer
 import subprocess
+import gzip
 
 class Glove_model():
 
@@ -52,7 +53,7 @@ class Glove_model():
                 self.W[self.vocab[word], :] = v
 
     def dataset_preprocessing(self, dataset, preprocessed_dataset):
-        train_files = glob.glob(str(dataset)+'/*.csv')
+        train_files = glob.glob(str(dataset)+'/*.csv.gz')
 
         # Read the files in the dataset and create setences
         print('Generating tokens from files.')
@@ -62,7 +63,7 @@ class Glove_model():
         aggregated_files = open(preprocessed_dataset, "w")
 
         for f in train_files:
-            with open(f, 'rt', newline='', encoding='utf-8') as f:
+            with gzip.open(f, mode='rt', newline='', encoding='utf-8') as f:
                 snippets = f.readlines()
                 for s in snippets:
                     for token in tokenizer(s):

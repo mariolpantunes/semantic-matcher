@@ -16,7 +16,7 @@ from sentence_transformers.training_args import BatchSamplers
 from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator, SimilarityFunction
 
 from datasets import load_dataset
-
+import gzip
 
 
 class TokenizedSentencesDataset:
@@ -203,7 +203,7 @@ class Sbert_model():
                 eval_dataset=dev_dataset
             )
 
-            tokenizer.save_pretrained(str(self.output))
+            tokenizer.save_pretrained(str(self.output / "base_model"))
             trainer.train()
             model.save_pretrained(str(self.output / "base_model"))
 
@@ -263,7 +263,7 @@ class Sbert_model():
         self.model.save_pretrained(trained_model_path)
 
     def dataset_preprocessing(self, dataset, preprocessed_train_dataset, preprocessed_test_dataset):
-        train_files = glob.glob(str(dataset)+'/*.csv')
+        train_files = glob.glob(str(dataset)+'/*.csv.gz')
 
         # Read the files in the dataset and create setences
         print('Generating tokens from files.')
@@ -271,7 +271,7 @@ class Sbert_model():
         aggregated_files = open(preprocessed_train_dataset, "w")
 
         for f in train_files[0:int(len(train_files)*0.8)]:
-            with open(f, 'rt', newline='', encoding='utf-8') as f:
+            with gzip.open(f, mode='rt', newline='', encoding='utf-8') as f:
                 snippets = f.readlines()
                 for s in snippets:
                     aggregated_files.write(s)
@@ -279,7 +279,7 @@ class Sbert_model():
         dev_files = open(preprocessed_test_dataset, "w")
 
         for f in train_files[int(len(train_files)*0.8):]:
-            with open(f, 'rt', newline='', encoding='utf-8') as f:
+            with gzip.open(f, mode='rt', newline='', encoding='utf-8') as f:
                 snippets = f.readlines()
                 for s in snippets:
                     dev_files.write(s)

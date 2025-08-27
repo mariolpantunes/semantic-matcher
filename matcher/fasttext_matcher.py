@@ -4,6 +4,7 @@ import glob
 import pathlib
 from matcher.tokenizer import tokenizer
 import fasttext
+import gzip
 
 class FastText_model():
 
@@ -56,7 +57,7 @@ class FastText_model():
         self.bias = None
         
     def dataset_preprocessing(self, dataset, preprocessed_dataset):
-        train_files = glob.glob(str(dataset)+'/*.csv')
+        train_files = glob.glob(str(dataset)+'/*.csv.gz')
 
         # Read the files in the dataset and create setences
         print('Generating tokens from files.')
@@ -66,7 +67,7 @@ class FastText_model():
         aggregated_files = open(preprocessed_dataset, "w")
 
         for f in train_files:
-            with open(f, 'rt', newline='', encoding='utf-8') as f:
+            with gzip.open(f, mode='rt', newline='', encoding='utf-8') as f:
                 snippets = f.readlines()
                 for s in snippets:
                     for token in tokenizer(s):

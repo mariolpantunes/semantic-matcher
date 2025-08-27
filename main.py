@@ -13,7 +13,7 @@ import configs
 import logging
 import argparse
 import time
-
+import gc
 
 from matcher.semantic_matcher import SemanticMathcer
 from matcher.metrics import mean_average_precision
@@ -166,7 +166,9 @@ def main(args):
             with open(args.s, 'wb') as output_file:
                 pickle.dump(semanticMatcher.model, output_file)
 
-
+        del semanticMatcher
+        gc.collect()
+        
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Semantic Matcher evaluation tool')
     parser.add_argument('-i', type=str, help='input file', default='scenario.json')
