@@ -14,7 +14,7 @@ def tokenizer(sentence):
     sentence = re.sub('\'','',sentence)
 
     #remove digits adnd words containing digits
-    sentence = re.sub('\w*\d\w*','',sentence)
+    sentence = re.sub(r'\w*\d\w*','',sentence)
 
     #replace extra spaces with single space
     sentence = re.sub(' +',' ',sentence)
